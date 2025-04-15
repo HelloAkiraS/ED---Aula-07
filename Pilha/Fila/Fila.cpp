@@ -4,16 +4,17 @@ using namespace std;
 // definicao de tipo
 struct NO {
 	int valor;
-	NO* ant;
+	NO* prox;
 };
 
-NO* topo = NULL;
+NO* inicio = NULL;
+NO* fim = NULL;
 
 // headers
 void menu();
 void inicializar();
-void pop();
-void push();
+void insere();
+void remove();
 //--------------------------
 
 
@@ -27,13 +28,12 @@ void menu()
 	int op = 0;
 	while (op != 4) {
 		system("cls"); // somente no windows
-		cout << "Menu Pilha";
+		cout << "Menu Fila";
 		cout << endl << endl;
-		cout << "1 - Inicializar Pilha \n";
-		cout << "2 - Inserir elemento (Push) \n";
-		cout << "3 - Remover elementos (Pop) \n";
+		cout << "1 - Inicializar Fila \n";
+		cout << "2 - Inserir elemento \n";
+		cout << "3 - Remover elemento  \n";
 		cout << "4 - Sair \n";
-
 
 		cout << "Opcao: ";
 		cin >> op;
@@ -42,9 +42,9 @@ void menu()
 		{
 		case 1: inicializar();
 			break;
-		case 2:push();
+		case 2:insere();
 			break;
-		case 3: pop();
+		case 3: remove();
 			break;
 		case 4:
 			return;
@@ -59,24 +59,24 @@ void menu()
 void inicializar()
 {
 
-	// se a lista já possuir elementos
+	// se a lista jÃ¡ possuir elementos
 	// libera a memoria ocupada
-	NO* aux = topo;
+	NO* aux = inicio;
 	while (aux != NULL) {
 		NO* paraExcluir = aux;
-		aux = aux->ant;
+		aux = aux->prox;
 		free(paraExcluir);
 	}
 
-	topo = NULL;
-	cout << "Pilha inicializada \n";
+	inicio = NULL;
+	fim = NULL;
+	cout << "Fila inicializada \n";
 
 }
 
 
-void push()
+void insere()
 {
-	// aloca memoria dinamicamente para o novo elemento
 	NO* novo = (NO*)malloc(sizeof(NO));
 	if (novo == NULL)
 	{
@@ -85,26 +85,27 @@ void push()
 
 	cout << "Digite o elemento: ";
 	cin >> novo->valor;
-	if (topo == NULL) {
-		topo = novo;
-		novo->ant = NULL;
+	novo->prox = NULL;
+	if (inicio == NULL) {
+		inicio = novo;
+		fim = novo;
 	}
 	else {
-		novo->ant = topo;
-		topo = novo;
+		fim->prox = novo;
+		fim = novo;
 	}
-
 }
 
-void pop()
+void remove()
 {
-	if (topo == NULL) {
-		cout << "Pilha vazia!!";
-	}
-	else {
-		NO* aux = topo;
-		topo = aux->ant;
-		cout << "Numero removido: " << aux->valor << endl;
+	if (inicio != NULL) {
+		NO* aux = inicio;
+		inicio = inicio->prox;
+		cout << "O numero excluido foi: " << aux->valor << endl;
 		free(aux);
 	}
+	else {
+		cout << "Lista ja esta vazia, desatento!" << endl;
+	}
+	
 }
